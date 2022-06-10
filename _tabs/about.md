@@ -4,7 +4,7 @@ icon: fas fa-info-circle
 order: 4
 ---
 
-# About Me
+# Short History of When it all Started
 
 Currently studying for my LFCS, but also really enjoy coding/scripting/automation with Bash, VBA, Python, Gawk & Ansible. I would classify myself a _"Jack of most, Master of none"_ type of person when it comes to all this, but i have been putting a lot of focus into Linux, and hence the LFCS.
 
