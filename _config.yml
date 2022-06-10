@@ -21,7 +21,7 @@ timezone: Europe/London
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Jonny's Tech Blog                          # the main title
+title: Jonny's Homelab Projects                          # the main title
 
 tagline: My Home Lab Projects  # it will display as the sub-title
 
