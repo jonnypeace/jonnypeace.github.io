@@ -1,5 +1,5 @@
 ---
-title: Rounding to Even numbers with Python
+title: Rounding Even with Python
 date: 2022-06-10 23:00:00 -500
 categories: [homelab, project, python, maths]
 tags: [python,maths,rounding]
