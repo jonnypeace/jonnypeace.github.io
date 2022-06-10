@@ -102,3 +102,7 @@ while run == "y":
     # run = input("Do you want to continue? Type 'y' if you do: ")
     run = "y"
 ```
+
+The reason for the long version, for those who are unwise to floating point maths in programming languages, is to correct some issues with the base 2 maths. A better explanation can be found here
+
+https://docs.python.org/3/tutorial/floatingpoint.html
