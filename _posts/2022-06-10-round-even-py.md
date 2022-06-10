@@ -1,6 +1,6 @@
 ---
 title: Rounding Even with Python
-date: 2022-06-10 23:00:00 -500
+date: 2022-06-09 13:00:00 -500
 categories: [python, maths]
 tags: [python,maths,rounding]
 ---
