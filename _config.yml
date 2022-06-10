@@ -21,12 +21,12 @@ timezone: Europe/London
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Jonny's Homelab                          # the main title
+title: Homelab Documentation                          # the main title
 
-tagline: My Home Lab Projects  # it will display as the sub-title
+tagline: For HomeLab Projects  # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
-  Document site for scripts, code and home lab projects
+  Document site for scripts, code and homelab projects
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
 url: 'https://github.com/jonnypeace/jonnypeace.github.io.git'
