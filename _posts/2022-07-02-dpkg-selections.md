@@ -1,6 +1,6 @@
 ---
 title: DPKG get-selections
-date: 2022-07-04 18:00:00 -500
+date: 2022-07-02 18:00:00 -500
 categories: [ubuntu,dpkg,automation,dselect]
 tags: [dpkg,get-selections,dselect]
 ---
