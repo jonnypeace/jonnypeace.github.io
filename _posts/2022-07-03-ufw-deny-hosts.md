@@ -1,10 +1,12 @@
 ---
-title: UFW & Hosts Deny/Allow
+title: UFW & Hosts Deny/Allow (More for VPS)
 date: 2022-07-03 22:00:00 -500
 categories: [ubuntu,hosts.deny,hosts.allow,firewall]
 tags: [firewall,ufw,hosts.deny,hosts.allow]
 ---
-# Quick way to Strengthen Ubuntu Security
+# Possible way to Strengthen Ubuntu Security
+
+Something i'm noticing in my UFW logs on my VPS (internet facing), are a number of syn blocks from what i suspect will be hackers, so many on my contabo server (~ 4000 i've got logged just now), it's difficult to keep up. A cross section of the traffic reveals Russia, Bulgaria, USA and so on. I will leave this blog up, for this use case. It might be overkill, and i might break something, in which case i'll take it down.
 
 Check the number of ip's in your UFW logs that have been blocked.
 
