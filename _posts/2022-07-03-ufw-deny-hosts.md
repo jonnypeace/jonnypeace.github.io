@@ -96,7 +96,7 @@ then
 else
 	sudo egrep -o "SRC=[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" /var/log/ufw.log | sort -u | cut -d= -f2 > "$HOME"/banning
 	sudo cat /etc/ban.list banning | sort -u > "$HOME"/ban.list
-	sudo cp ~/ban.list /etc/ban.list
+	sudo cp "$HOME"/ban.list /etc/ban.list
 fi
 
 ```
