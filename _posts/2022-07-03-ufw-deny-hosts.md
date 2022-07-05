@@ -68,17 +68,25 @@ sudo cp ~/ban.list /etc/ban.list
 ```bash
 #!/bin/bash
 
+# This can be an ip address or domain, which will be used to ensure you don't lock yourself out.
+
 my_domain=example.com
+
+#Check if your domain has been added to the hosts.allow
 
 if ! sudo grep "$my_domain" /etc/hosts.allow > /dev/null
 then
 	sudo echo "ALL: $my_domain" | tee -a /etc/hosts.allow
 fi
 
+#Check if your ban.lisst has been added to hosts.deny
+
 if ! sudo grep "/etc/ban.list" /etc/hosts.deny > /dev/null
 then
 	sudo echo "ALL: /etc/ban.list" | tee -a /etc/hosts.deny
 fi
+
+#Check if the file banning exists, if not treat as if first run. If file exists, concatenate the new banning file with the existing ban.list, sort unique and move the new list to the correct location.
 
 if [[ ! -f "$HOME"/banning  ]]
 then
