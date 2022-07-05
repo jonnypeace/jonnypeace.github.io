@@ -62,3 +62,32 @@ Copy the new ban.list file to /etc
 ```bash
 sudo cp ~/ban.list /etc/ban.list 
 ```
+
+## Lets script this...
+
+```bash
+#!/bin/bash
+
+my_domain=example.com
+
+if ! sudo grep "$my_domain" /etc/hosts.allow > /dev/null
+then
+	sudo echo "ALL: $my_domain" | tee -a /etc/hosts.allow
+fi
+
+if ! sudo grep "/etc/ban.list" /etc/hosts.deny > /dev/null
+then
+	sudo echo "ALL: /etc/ban.list" | tee -a /etc/hosts.deny
+fi
+
+if [[ ! -f "$HOME"/banning  ]]
+then
+	sudo egrep -o "SRC=[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" /var/log/ufw.log | sort -u | cut -d= -f2 > "$HOME"/banning
+	sudo cp "$HOME"/banning /etc/ban.list
+else
+	sudo egrep -o "SRC=[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}" /var/log/ufw.log | sort -u | cut -d= -f2 > "$HOME"/banning
+	sudo cat /etc/ban.list banning | sort -u > "$HOME"/ban.list
+	sudo cp ~/ban.list /etc/ban.list
+fi
+
+```
