@@ -7,7 +7,7 @@ tags: [mariadb,smartctl,smartmontools,database]
 
 # Purpose
 
-If anyone else buys older drives on eBay, you'll soon realise the importance of keeping tabs on your hard drives, quickly. So, i created this to keep track of aging hard drives, but obviously a good idea to keep track with new hard drives also.
+If anyone else buys older drives on eBay, you will soon realise the importance of keeping tabs on your hard drives, quickly. So, i created this to keep track of aging hard drives, but obviously a good idea to keep track with new hard drives also.
 
 ## Create Database
 
@@ -15,22 +15,22 @@ I will assume you know how to enter mariadb, if not, i might come back here and 
 Inside mariadb
 
 Create database called health
-```mysql
+```sql
 CREATE DATABASE health;
 ```
 
 Grant permissions to a new user called hdd using a password of mypass (obviously you can use whatever password you desire, and obviously mypass is not a safe password)
-```mysql
+```sql
 GRANT SELECT, INSERT,DELETE,UPDATE ON health.* TO hdd IDENTIFIED by 'mypass';
 ```
 
 Navigate into the health database
-```mysql
+```sql
 use health
 ```
 
 Create a table with all the fields required (for my SAS drive script, this is what i'm looking at)
-```mysql
+```sql
 CREATE TABLE stats (id INT NOT NULL AUTO_INCREMENT, Date DATE NOT NULL, HDDdefect INT NOT NULL, NonMedium INT NOT NULL, HealthStatus VARCHAR(20) NOT NULL, ReadErr INT NOT NULL, WriteErr INT NOT NULL, HDD VARCHAR(15) NOT NULL, primary key (id));
 ```
 
