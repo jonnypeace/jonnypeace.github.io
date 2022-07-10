@@ -91,7 +91,7 @@ maria=$(which mariadb)
 
 for i in $drive_list
 do
-	mapfile -t -d'/n' array < <(smartctl -a "$i")
+	mapfile -t -d'\n' array < <(smartctl -a "$i")
 	# grown defects
 	hd_grow=$(awk '/grown defect list/{print $6}' <<< "${array[@]}")
 
