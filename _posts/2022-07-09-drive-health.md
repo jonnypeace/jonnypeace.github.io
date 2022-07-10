@@ -86,61 +86,41 @@ function drive_hdd {
 # Updates the database with new data from smartctl
 function updater {
 
-now=$(date "+%Y-%m-%d")
-
-mapfile -t -d'|n' array1 < <(smartctl -a "$d1")
-mapfile -t -d'|n' array2 < <(smartctl -a "$d2")
-mapfile -t -d'|n' array3 < <(smartctl -a "$d3")
-mapfile -t -d'|n' array4 < <(smartctl -a "$d4")
-
-# grown defects
-hd_grow_1=$(awk '/grown defect list/{print $6}' <<< "${array1[@]}")
-hd_grow_2=$(awk '/grown defect list/{print $6}' <<< "${array2[@]}")
-hd_grow_3=$(awk '/grown defect list/{print $6}' <<< "${array3[@]}")
-hd_grow_4=$(awk '/grown defect list/{print $6}' <<< "${array4[@]}")
-
-# health status
-hd_health_1=$(awk '/SMART Health/{print $4}' <<< "${array1[@]}")
-hd_health_2=$(awk '/SMART Health/{print $4}' <<< "${array2[@]}")
-hd_health_3=$(awk '/SMART Health/{print $4}' <<< "${array3[@]}")
-hd_health_4=$(awk '/SMART Health/{print $4}' <<< "${array4[@]}")
-
-# non-medium errors (i.e. not the HDD)
-hd_non_1=$(awk '/Non-medium error/{print $4}' <<< "${array1[@]}")
-hd_non_2=$(awk '/Non-medium error/{print $4}' <<< "${array2[@]}")
-hd_non_3=$(awk '/Non-medium error/{print $4}' <<< "${array3[@]}")
-hd_non_4=$(awk '/Non-medium error/{print $4}' <<< "${array4[@]}")
-
-# read error
-hd_read_1=$(awk '/^read:/{print $8}' <<< "${array1[@]}")
-hd_read_2=$(awk '/^read:/{print $8}' <<< "${array2[@]}")
-hd_read_3=$(awk '/^read:/{print $8}' <<< "${array3[@]}")
-hd_read_4=$(awk '/^read:/{print $8}' <<< "${array4[@]}")
-
-# write errors
-hd_write_1=$(awk '/^write:/{print $8}' <<< "${array1[@]}")
-hd_write_2=$(awk '/^write:/{print $8}' <<< "${array2[@]}")
-hd_write_3=$(awk '/^write:/{print $8}' <<< "${array3[@]}")
-hd_write_4=$(awk '/^write:/{print $8}' <<< "${array4[@]}")
-
+now=$(printf '%(%Y-%m-%d)T\n')
 maria=$(which mariadb)
 
-statement="INSERT INTO stats (Date,HDDdefect,NonMedium,HealthStatus,HDD,ReadErr,WriteErr) VALUES
-('$now', '$hd_grow_1', '$hd_non_1', '$hd_health_1', '$d1', '$hd_read_1', '$hd_write_1'),
-('$now', '$hd_grow_2', '$hd_non_2', '$hd_health_2', '$d2', '$hd_read_2', '$hd_write_2'),
-('$now', '$hd_grow_3', '$hd_non_3', '$hd_health_3', '$d3', '$hd_read_3', '$hd_write_3'),
-('$now', '$hd_grow_4', '$hd_non_4', '$hd_health_4', '$d4', '$hd_read_4', '$hd_write_4')"
+for i in $drive_list
+do
+	mapfile -t -d'/n' array < <(smartctl -a "$i")
+	# grown defects
+	hd_grow=$(awk '/grown defect list/{print $6}' <<< "${array[@]}")
 
-$maria health -u hdd << EOF
-$statement
+	# health status
+	hd_health=$(awk '/SMART Health/{print $4}' <<< "${array[@]}")
+
+	# non-medium errors (i.e. not the HDD)
+	hd_non=$(awk '/Non-medium error/{print $4}' <<< "${array[@]}")
+
+	# read error
+	hd_read=$(awk '/^read:/{print $8}' <<< "${array[@]}")
+
+	# write errors
+	hd_write=$(awk '/^write:/{print $8}' <<< "${array[@]}")
+
+	statement="INSERT INTO stats (Date,HDDdefect,NonMedium,HealthStatus,HDD,ReadErr,WriteErr) VALUES
+	('$now', '$hd_grow', '$hd_non', '$hd_health', '$i', '$hd_read', '$hd_write')"
+
+	$maria health -u hdd << EOF
+	$statement
 EOF
-if [[ $? == 0 ]]
-then
-	echo -e "\nData added successfully\n\n"
-	$maria health -u hdd -e 'SELECT * from stats'
-else
-	echo "Something went wrong"
-fi
+	if [[ $? == 0 ]]
+	then
+		echo -e "\nData added successfully for $i\n\n"
+		$maria health -u hdd -e "SELECT * FROM stats WHERE hdd = '$i'"
+	else
+		echo "Something went wrong"
+	fi
+done
 }
 
 while getopts ahl:d:u opt
@@ -156,4 +136,5 @@ do
 		*) exit
 	esac
 done
+
 ```
