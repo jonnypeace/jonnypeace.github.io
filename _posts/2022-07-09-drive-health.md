@@ -31,7 +31,7 @@ use health
 
 Create a table with all the fields required (for my SAS drive script, this is what i'm looking at)
 ```sql
-CREATE TABLE stats (id INT NOT NULL AUTO_INCREMENT, Date DATE NOT NULL, HDDdefect INT NOT NULL, NonMedium INT NOT NULL, HealthStatus VARCHAR(20) NOT NULL, ReadErr INT NOT NULL, WriteErr INT NOT NULL, HDD VARCHAR(15) NOT NULL, primary key (id));
+CREATE TABLE stats (id INT NOT NULL AUTO_INCREMENT, Date DATE NOT NULL, HDDdefect INT NOT NULL, NonMedium INT NOT NULL, HealthStatus VARCHAR(20) NOT NULL, ReadErr INT NOT NULL, WriteErr INT NOT NULL, HDD VARCHAR(15) NOT NULL, Serial VARCHAR(25) NOT NULL, primary key (id));
 ```
 
 ## The script
