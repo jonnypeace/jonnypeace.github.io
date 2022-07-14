@@ -56,7 +56,7 @@ function helper {
 
 	./health-hdd.sh -h (this helper)
 	./health-hdd.sh -u (run the updater, and update the database)
-	./health-hdd.sh -d /dev/sda (will show stats for that drive only)
+	./health-hdd.sh -d /dev/sda 4 (will show stats for last 4 drive entries for /dev/sda)
 	./health-hdd.sh -a (will show the entire table organised by drive)
 	./health-hdd.sh -l 4 (will show the last 4 entries)"
 }
@@ -72,15 +72,29 @@ function all_health {
 
 # Shows the last entries, defined by a number on the command line
 function last_lot {
-	mariadb health -u hdd -e "SELECT * FROM (
-	SELECT * FROM stats ORDER BY id DESC LIMIT $number 
-	)Var1
-	ORDER BY id ASC;"
+	for i in $drive_list
+	do
+		mariadb health -u hdd -e "SELECT * FROM (
+		SELECT * FROM stats WHERE hdd = '$i' ORDER BY id DESC LIMIT $number 
+		)Var1
+		ORDER BY id ASC;"
+	done
 }
 
 # Shows only one specific drive
 function drive_hdd {
-	mariadb health -u hdd -e "SELECT * FROM stats WHERE hdd = '$drive_num'"
+	if [[ $args == 3 ]]
+	then
+		mariadb health -u hdd -e "SELECT * FROM (
+		SELECT * FROM stats WHERE hdd = '$drive_num' ORDER BY id DESC LIMIT $number
+		)Var1
+		ORDER BY id ASC;"
+	elif [[ $args == 2 ]]
+	then
+		mariadb health -u hdd -e "SELECT * FROM stats WHERE hdd = '$drive_num'"
+	else
+		helper
+	fi
 }
 
 # Updates the database with new data from smartctl
@@ -107,8 +121,11 @@ do
 	# write errors
 	hd_write=$(awk '/^write:/{print $8}' <<< "${array[@]}")
 
-	statement="INSERT INTO stats (Date,HDDdefect,NonMedium,HealthStatus,HDD,ReadErr,WriteErr) VALUES
-	('$now', '$hd_grow', '$hd_non', '$hd_health', '$i', '$hd_read', '$hd_write')"
+	# serial
+	serial=$(awk '/Serial number:/{print $3}' <<< "${array[@]}")
+
+	statement="INSERT INTO stats (Date,HDDdefect,NonMedium,HealthStatus,HDD,ReadErr,WriteErr,Serial) VALUES
+	('$now', '$hd_grow', '$hd_non', '$hd_health', '$i', '$hd_read', '$hd_write', '$serial')"
 
 	$maria health -u hdd << EOF
 	$statement
@@ -123,7 +140,7 @@ EOF
 done
 }
 
-while getopts ahl:d:u opt
+while getopts ahl:d:2u opt
 do
 	case "$opt" in
 		a) all_health ;;
@@ -131,9 +148,11 @@ do
 		l) number=$2
 		   last_lot ;;
 		d) drive_num=$2
+		   args=$#
+		   number=$3
 		   drive_hdd ;;
 		u) updater ;;
-		*) exit
+		*) helper
 	esac
 done
 
