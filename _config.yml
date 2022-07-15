@@ -21,7 +21,7 @@ timezone: Europe/London
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Homelab Documentation                          # the main title
+title: Homelab Documents                          # the main title
 
 tagline: For HomeLab Projects  # it will display as the sub-title
 
