@@ -65,17 +65,26 @@ network:
     version: 2
     renderer: NetworkManager
 ```
-For eth0 addresses: This is the ip address for the ubuntu router, which is connected to my ISP router, and the ISP router supplies this LAN ip.
-For eth0 default routes via... this is my router ip address.
+***eth0***
+
+Addresses is the ip address for the ubuntu router, which is connected to my ISP router (for the WAN), and the ISP router supplies this LAN ip.
+
+For eth0 default routes via... this is my router ip address 192.168.1.1.
+
 For eth0 nameservers, i've just included quad 9's IP address, but update with your own preference.
 
 enx000ec6dab3a7: {} - This basically identifies the interface for later use
 
 enxa0cec8c0b0e2: {} - This basically identifies the interface for later use
 
-Bridges..
-br0.10 is the interface i'll be using for my LAN, using the ip address 10.10.10.10.1 will be the ubuntu lan ip which devices connect to.
-nameservers is the same idea as the WAN.
+***Bridges***
+
+br0.10 is the interface i'll be using for my LAN, using the ip address 
+
+10.10.10.10.1 will be the ubuntu lan ip which devices connect to.
+
+Nameservers is the same idea as the WAN.
+
 Includes both interfaces for the bridge
 
 renderer - i added this in for NetworkManager, so i could use cockpit with this setup.
@@ -113,12 +122,14 @@ subnet 10.10.10.0 netmask 255.255.255.0 {
 }
 ```
 Lease times are something a DHCP server will renew, and these are the times i've decided on.
+
 This sets up a 10.10.10.1/24 LAN network for your devices to connect to with DHCP.
+
 The range of 10.10.10.100-10.10.10.200 is for the dhcp server. This reserves the 10.10.10.2-10.10.10.99 & 10.10.10.201+ range for static IPs
 
 Looking at ubuntu's documentation on this, it looks like you can assign static IP's using the MAC addresses in this config file.
 
-https://help.ubuntu.com/community/isc-dhcp-server
+[Ubuntu - isc-dhcp-server link](https://help.ubuntu.com/community/isc-dhcp-server)
 
 All my static IP's are done on the host, so it's not something i've centralised like this.
 
@@ -199,4 +210,4 @@ sudo apt install cockpit
 
 For the UFW firewall, check out Ubuntu's website, they might cover some commands you'll find useful.
 
-https://ubuntu.com/server/docs/security-firewall
+[Ubuntu UFW Docs](https://ubuntu.com/server/docs/security-firewall)
