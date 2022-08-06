@@ -146,7 +146,7 @@ less /var/lib/dhcp/dhcpd.leases
 Ok, this will depend a little on your services, but this is where i've went with it.
 
 ```bash
-sudo ufw limit from 10.10.100.20 to any port 22 proto tcp
+sudo ufw limit from 10.10.10.0/24 to any port 22 proto tcp
 sudo ufw allow from 10.10.10.0/24 to any port 67 proto udp
 sudo ufw allow from 10.10.10.0/24 to any port 68 proto udp
 sudo ufw allow from 10.10.10.0/24 to any port 53 proto tcp
