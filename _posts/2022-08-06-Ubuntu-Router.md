@@ -19,11 +19,7 @@ Packages installed:
   
 So lets begin
 
-## Install isc-dhcp-server
-
-```bash
-sudo apt install isc-dhcp-server
-```
+## Netplan
 
 Check which interfaces are available...
 
@@ -82,7 +78,11 @@ Includes both interfaces for the bridge
 
 renderer - i added this in for NetworkManager, so i could use cockpit with this setup.
 
-## /etc/default/isc-dhcp-server
+## isc-dhcp-server
+
+```bash
+sudo apt install isc-dhcp-server
+```
 
 Now lets edit this file /etc/default/isc-dhcp-server
 
@@ -133,7 +133,7 @@ less /var/lib/dhcp/dhcpd.leases
 Ok, this will depend a little on your services, but this is where i've went with it.
 
 ```bash
-sudo ufw allow from 10.10.10.0/24 to any port 22 proto tcp
+sudo ufw limit from 10.10.100.20 to any port 22 proto tcp
 sudo ufw allow from 10.10.10.0/24 to any port 67 proto udp
 sudo ufw allow from 10.10.10.0/24 to any port 68 proto udp
 sudo ufw allow from 10.10.10.0/24 to any port 53 proto tcp
@@ -143,7 +143,7 @@ sudo ufw allow from 10.10.10.0/24 to any port 9090 proto tcp
 sudo ufw route allow in on br0.10 out on eth0
 
 ```
-I've allowed ssh access on the LAN, DHCP (67,68), DNS(53), and cockpit(9090).
+I've allowed ssh (with a rate limit) access on the LAN, DHCP (67,68), DNS(53), and cockpit(9090).
 
 I'm allowing traffic to be forwarded from the bridge, to the WAN.
 
@@ -163,7 +163,7 @@ Lets edit the /etc/ufw/before.rules and include these lines before the filter ru
 :POSTROUTING ACCEPT [0:0]
 
 # Forward traffic from br0.10 through eth0.
--A POSTROUTING -s 10.10.10.1/24 -o eth0 -j MASQUERADE
+-A POSTROUTING -s 10.10.10.0/24 -o eth0 -j MASQUERADE
 
 # don't delete the 'COMMIT' line or these nat table rules won't be processed
 COMMIT
