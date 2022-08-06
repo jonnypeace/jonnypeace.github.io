@@ -29,11 +29,13 @@ ip a
 
 The three interfaces i'm interested are the built in ethernet and 2 x USB ethernet.
 
-```bash
-eth0 - built-in ethernet
-enxa0cec8c0b0e2 - usb ethernet
-enx000ec6dab3a7 -usb ethernet
-```
+
+> eth0 - built-in ethernet
+> 
+> enxa0cec8c0b0e2 - usb ethernet
+> 
+> enx000ec6dab3a7 -usb ethernet
+
 eth0 will be my WAN
 
 enx000ec6dab3a7 & enxa0cec8c0b0e2 will be my bridge network br0.10
