@@ -15,6 +15,7 @@ I've decided to stay with the UFW firewall, but i have thought about trying fire
 
 Packages installed: 
 * isc-dhcp-server
+* cockpit
   
 So lets begin
 
@@ -71,6 +72,7 @@ For eth0 default routes via... this is my router ip address.
 For eth0 nameservers, i've just included quad 9's IP address, but update with your own preference.
 
 enx000ec6dab3a7: {} - This basically identifies the interface for later use
+
 enxa0cec8c0b0e2: {} - This basically identifies the interface for later use
 
 Bridges..
@@ -111,6 +113,20 @@ subnet 10.10.10.0 netmask 255.255.255.0 {
 Lease times are something a DHCP server will renew, and these are the times i've decided on.
 This sets up a 10.10.10.1/24 LAN network for your devices to connect to with DHCP.
 The range of 10.10.10.100-10.10.10.200 is for the dhcp server. This reserves the 10.10.10.2-10.10.10.99 & 10.10.10.201+ range for static IPs
+
+Looking at ubuntu's documentation on this, it looks like you can assign static IP's using the MAC addresses in this config file.
+
+https://help.ubuntu.com/community/isc-dhcp-server
+
+All my static IP's are done on the host, so it's not something i've centralised like this.
+
+## dhcp leases
+
+You can view your DHCP leases here...
+
+```bash
+less /var/lib/dhcp/dhcpd.leases
+```
 
 ## UFW
 
