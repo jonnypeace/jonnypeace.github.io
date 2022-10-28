@@ -46,7 +46,7 @@ sudo su -
 apt install wireguard
 cd /etc/wireguard/
 ```
-Create keys
+Create server Keys
 ```bash
 umask 077; wg genkey | tee privatekey | wg pubkey > publickey
 ```
@@ -125,10 +125,6 @@ ip a
 Replace "HOSTNAMEorIPofGATEWAY" with the IP above (the above ip is for home use, if you're using a VPS or dynamic dns, it will be the hostname or public ip you use to SSH into the server, BUT i'm not covering VPS/cloud in this readme)
 ```bash
 sed -i "s|Endpoint = MYDNS.ORMY.IP|Endpoint = HOSTNAMEorIPofGATEWAY|g" wireguardadduser.sh 
-```
-This will add your public key to the client config, no edit necessary
-```bash
-sed -i "s|PublicKey = MYPUBKEY|PublicKey = $(cat publickey)|g" wireguardadduser.sh 
 ```
 
 Ok, the script should be ready to run, just folllow the prompts.
