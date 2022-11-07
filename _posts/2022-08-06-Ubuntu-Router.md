@@ -212,7 +212,7 @@ For the UFW firewall, check out Ubuntu's website, they might cover some commands
 
 [Ubuntu UFW Docs](https://ubuntu.com/server/docs/security-firewall)
 
-# VLANs
+## VLANs
 
 update: 07/11/2022
 
@@ -394,3 +394,16 @@ Chain ufw-before-forward (1 references)
 
 ```
 You can see the ctstate RELATED,ESTABLISHED processes the bulk of the packets (53G), and with my understanding... this accomplishes a stateful rule for the before-forward traffic. There's every chance i've missed or included something unnecessary, and I would be forever grateful if this was highlighted to me. Fingers crossed you have a new ubuntu router, with VLAN traffic.
+
+## The Switch - TP Link TL-SG1016DE
+
+Examples for making this simple smart managed switch to work with vlans. Just remember to set the vlan ID to the same ID as on your ubuntu router.
+
+![Switch vlan settings](https://i.ibb.co/09Rcsyg/Screenshot-from-2022-11-07-21-37-05.png)
+_bridge_
+
+![Switch vlan settings](https://i.ibb.co/DG60R1j/Screenshot-from-2022-11-07-21-36-56.png)
+_vlan2_
+
+![Switch vlan settings](https://i.ibb.co/xzH3M2S/Screenshot-from-2022-11-07-21-37-27.png)
+_default vlan-id_
