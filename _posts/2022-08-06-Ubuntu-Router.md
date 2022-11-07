@@ -378,8 +378,8 @@ And look for...
 Chain ufw-before-forward (1 references)
  pkts bytes target     prot opt in     out     source               destination         
 1425K   78M ACCEPT     all  --  vlan2  eth0    anywhere             anywhere            
-    0     0 ACCEPT     all  --  any    vlan2   10.10.10.144        anywhere            
-  181 12442 ACCEPT     all  --  any    vlan2   10.10.10.125        anywhere            
+    0     0 ACCEPT     all  --  any    vlan2   10.10.10.185        anywhere            
+  181 12442 ACCEPT     all  --  any    vlan2   10.10.10.175        anywhere            
 20486 1846K ACCEPT     all  --  any    vlan2   nfs.home             anywhere            
 27170 2328K ACCEPT     all  --  vlan2  any     anywhere             nfs.home            
 3276K 4648M ACCEPT     all  --  any    vlan2   anywhere             anywhere            
