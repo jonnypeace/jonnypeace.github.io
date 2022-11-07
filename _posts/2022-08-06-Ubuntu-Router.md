@@ -211,3 +211,186 @@ sudo apt install cockpit
 For the UFW firewall, check out Ubuntu's website, they might cover some commands you'll find useful.
 
 [Ubuntu UFW Docs](https://ubuntu.com/server/docs/security-firewall)
+
+# VLANs
+
+update: 07/11/2022
+
+Ok, I wanted to write about this earlier in the year, but my managed switch died on me, and I've only just got round to replacing it.
+
+FYI, I am using a TP-Link smart managed switch here, nothing too fancy but this is the model number TL-SG1016DE. All I need is a little network segregation and this fits the bill for a reasonable price. No high speeds in this house, but gigabit LAN has been good to me over the years.
+
+Due to me self hosting some services, I wanted to keep the self hosted network separate from my safer home network, and hence the vlan. I am going to continue with the bridge netplan discussed earlier, and include one VLAN in this configuration. This vlan network consists of an LXD cluster and some other goodies, but for container creation, i need DHCP as i'm using macVLAN with the LXD cluster, so in this section i'll have to include something for the VLAN DHCP server, so lets begin...
+
+##  VLAN - Netplan YAML
+```bash
+network:
+    ethernets:
+      eth0:
+        addresses: [192.168.1.10/24]
+        routes:
+          - to: default
+            via: 192.168.1.1
+        nameservers: 
+          addresses: [9.9.9.9, 149.112.112.112]
+      enx000ec6dab3a7: {}
+      enxa0cec8c0b0e2: {}
+    bridges:
+      br0.10:
+        addresses:
+          - 10.10.10.1/24]
+        nameservers:
+          addresses: [9.9.9.9, 149.112.112.112]
+        interfaces:
+          - enxa0cec8c0b0e2
+          - enx000ec6dab3a7
+    vlans:
+      vlan2:
+        id: 2
+        link: br0.10
+        addresses: [10.10.20.1/24]
+    version: 2
+    renderer: NetworkManager
+```
+
+## /etc/ufw/before.rules
+
+This file now has this inclusion of the VLAN (10.10.20.0/24)masquerade..
+
+```bash
+# nat Table rules
+*nat
+:POSTROUTING ACCEPT [0:0]
+
+# Forward traffic from vlan2 & br0.10 through a NAT on eth0.
+-A POSTROUTING -s 10.10.10.0/24 -o eth0 -j MASQUERADE
+-A POSTROUTING -s 10.10.20.0/24 -o eth0 -j MASQUERADE
+
+# don't delete the 'COMMIT' line or these nat table rules won't be processed
+COMMIT
+```
+
+Ok this bit will be dependant on the whether you want one way traffic or any sort of communication between your VLAN and safer home network, and i do, so i'll include them and explain.
+
+```bash
+# When you find the rules below....
+
+# Don't delete these required lines, otherwise there will be errors
+*filter
+:ufw-before-input - [0:0]
+:ufw-before-output - [0:0]
+:ufw-before-forward - [0:0]
+:ufw-not-local - [0:0]
+# End required lines
+
+# ENTER FORWARD RULES NOW...
+
+#### MY forward
+# vlan2 to WAN - this could be included with the standard UFW command, but since i'm here (a few of these rules could probably be applied on the commandline, but this was easier to test the rules)...
+-A ufw-before-forward -i vlan2 -o eth0 -j ACCEPT
+
+## Firewall rules between vlan2 and specific device.
+# Laptop to vlan2
+-A ufw-before-forward -s 10.10.10.185/32 -o vlan2 -j ACCEPT
+# phone to vlan2
+-A ufw-before-forward -s 10.10.10.175/32 -o vlan2 -j ACCEPT
+# NFS share for jellyfin - i've had to set it up this way, so the jellyfin container can mount the NFS share. 
+# Funnily enough, I am using firewalld on this server, so i added the jellyfin to the public zone where only NFS is allowed. 
+# Also, with NFS, i have provided these mount paths with read only access from /etc/exports, just to harden security. Jellyfin doesn't need write access to them.
+-A ufw-before-forward -s 10.10.10.40/32 -o vlan2 -j ACCEPT
+-A ufw-before-forward -i vlan2 -d 10.10.10.40/32 -j ACCEPT
+
+# Leave this section at the bottom of the MY forward rules. This uses conntrack to prevent vlan2 from initiating new connections with my phone or laptop that i've let through the guard.
+-A ufw-before-forward -o vlan2 -j ACCEPT
+-A ufw-before-forward -i vlan2 -m state ! --state NEW -j ACCEPT
+-A ufw-before-forward -i vlan2 -m state --state NEW -j REJECT
+
+```
+Once those rules are added, remember to...
+
+```bash
+sudo ufw reload
+```
+
+### UFW rules
+
+Ok, now some standard DHCP and DNS access rules. It's worth pointing out. I'm using DNS 9.9.9.9 etc in my netplan example, but the reality is i'm using pihole, or i could use bind.
+
+```bash
+sudo ufw allow from 10.10.20.0/24 to any port 67 proto udp
+sudo ufw allow from 10.10.20.0/24 to any port 68 proto udp
+sudo ufw allow from 10.10.20.0/24 to any port 53 proto tcp
+sudo ufw allow from 10.10.20.0/24 to any port 53 proto udp
+```
+
+## VLAN - DHCP Server
+
+Ok, time to add the vlan2 to the DHCP server.
+### /etc/dhcp/dhcpd.conf
+
+```bash
+default-lease-time 43200;
+max-lease-time 86400;
+authoritative;
+## vlan2
+subnet 10.10.20.0 netmask 255.255.255.0 {
+    option domain-name "vlan2.lan";
+    option routers 10.10.20.1;
+    option subnet-mask 255.255.255.0;
+    option broadcast-address 10.10.20.255;
+    range 10.10.20.50 10.10.20.100;
+    option domain-name-servers 9.9.9.9;
+}
+## home.lan
+subnet 10.10.10.0 netmask 255.255.255.0 {
+    option domain-name "home.lan";
+    option routers 10.10.10.1;
+    option subnet-mask 255.255.255.0;
+    option broadcast-address 10.10.10.255;
+    range 10.10.10.100 10.10.10.200;
+    option domain-name-servers 9.9.9.9;
+}
+```
+
+### /etc/default/isc-dhcp-server
+
+```bash
+INTERFACESv4="br0.10 vlan2"
+INTERFACESv6=""
+```
+If there is anything that could be improved with this setup, please get in touch. I never included stateful rules with the ufw forward, simply because ufw-before-forward rules have this included by default...
+
+```bash
+# quickly process packets for which we already have a connection
+-A ufw-before-input -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A ufw-before-output -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+-A ufw-before-forward -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+```
+And if you have set this up like I have, and scan iptables...
+
+```bash
+sudo iptables -vL | less
+```
+
+And look for...
+
+```bash
+Chain ufw-before-forward (1 references)
+ pkts bytes target     prot opt in     out     source               destination         
+1425K   78M ACCEPT     all  --  vlan2  eth0    anywhere             anywhere            
+    0     0 ACCEPT     all  --  any    vlan2   10.10.10.144        anywhere            
+  181 12442 ACCEPT     all  --  any    vlan2   10.10.10.125        anywhere            
+20486 1846K ACCEPT     all  --  any    vlan2   nfs.home             anywhere            
+27170 2328K ACCEPT     all  --  vlan2  any     anywhere             nfs.home            
+3276K 4648M ACCEPT     all  --  any    vlan2   anywhere             anywhere            
+ 183K   81M ACCEPT     all  --  vlan2  any     anywhere             anywhere             ! state NEW
+    5   372 REJECT     all  --  vlan2  any     anywhere             anywhere             state NEW reject-with icmp-port-unreachable
+  43M   53G ACCEPT     all  --  any    any     anywhere             anywhere             ctstate RELATED,ESTABLISHED
+    0     0 ACCEPT     icmp --  any    any     anywhere             anywhere             icmp destination-unreachable
+    0     0 ACCEPT     icmp --  any    any     anywhere             anywhere             icmp time-exceeded
+    0     0 ACCEPT     icmp --  any    any     anywhere             anywhere             icmp parameter-problem
+ 4836  342K ACCEPT     icmp --  any    any     anywhere             anywhere             icmp echo-request
+59103   10M ufw-user-forward  all  --  any    any     anywhere             anywhere            
+
+```
+You can see the ctstate RELATED,ESTABLISHED processes the bulk of the packets (53G), and with my understanding... this accomplishes a stateful rule for the before-forward traffic. There's every chance i've missed or included something unnecessary, and I would be forever grateful if this was highlighted to me. Fingers crossed you have a new ubuntu router, with VLAN traffic.
