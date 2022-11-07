@@ -214,7 +214,7 @@ For the UFW firewall, check out Ubuntu's website, they might cover some commands
 
 ## VLANs
 
-update: 07/11/2022
+*Updated: 07/11/2022*
 
 Ok, I wanted to write about this earlier in the year, but my managed switch died on me, and I've only just got round to replacing it.
 
