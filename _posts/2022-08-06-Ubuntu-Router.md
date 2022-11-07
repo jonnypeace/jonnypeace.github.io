@@ -405,5 +405,12 @@ _bridge_
 ![Switch vlan settings](https://i.ibb.co/DG60R1j/Screenshot-from-2022-11-07-21-36-56.png)
 _vlan2_
 
+In this example, i've removed ports 4, 6 and 8 on the vlan config to non members of vlan ID 1 (vlan id 1 is untagged so will work on bridge).
+I then added ports 4, 6 and 8 to the vlan id 2 untagged. Port 16 in this example is tagged, which is the port connecting to the ubuntu router. It will tag all untagged ports and send to the ubuntu router.
+
 ![Switch vlan settings](https://i.ibb.co/xzH3M2S/Screenshot-from-2022-11-07-21-37-27.png)
 _default vlan-id_
+
+This section is so simple yet i overlooked it when testing. Everything defaults to vlan id 1 on initial setup. So when running vlans, you will need to set the default here. In this example I have set ports 4, 6 and 8 to default to vlan id 2. This is quite different from my old linksys/cisco switch, but not too different.
+
+Fingers crossed you have a functioning ubuntu router, and with vlans if you choose.
