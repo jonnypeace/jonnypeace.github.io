@@ -290,10 +290,6 @@ Ok this bit will be dependant on the whether you want one way traffic or any sor
 -A ufw-before-forward -i vlan2 -o eth0 -j ACCEPT
 
 ## Firewall rules between vlan2 and specific device.
-# Laptop to vlan2
--A ufw-before-forward -s 10.10.10.185/32 -o vlan2 -j ACCEPT
-# phone to vlan2
--A ufw-before-forward -s 10.10.10.175/32 -o vlan2 -j ACCEPT
 # NFS share for jellyfin - i've had to set it up this way, so the jellyfin container can mount the NFS share. 
 # Funnily enough, I am using firewalld on this server, so i added the jellyfin to the public zone where only NFS is allowed. 
 # Also, with NFS, i have provided these mount paths with read only access from /etc/exports, just to harden security. Jellyfin doesn't need write access to them.
