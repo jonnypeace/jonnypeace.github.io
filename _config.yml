@@ -23,7 +23,7 @@ timezone: Europe/London
 
 title: Peace Linux Development                          # the main title
 
-tagline: HomeLab Projects  # it will display as the sub-title
+tagline: For HomeLab Projects  # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
   Document site for scripts, code and homelab projects
