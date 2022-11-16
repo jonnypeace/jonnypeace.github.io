@@ -21,9 +21,9 @@ timezone: Europe/London
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Homelab Docs                          # the main title
+title: Peace Linux Development                          # the main title
 
-tagline: For HomeLab Projects  # it will display as the sub-title
+tagline: HomeLab Projects  # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
   Document site for scripts, code and homelab projects
