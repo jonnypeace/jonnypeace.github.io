@@ -14,8 +14,5 @@ A lot has happened since then, so i feel the time is right to document/blog all 
 
 See you in the next blog post. :)
 
-[LFCS Verified](https://www.credly.com/badges/47e41727-76a8-4299-827b-52dccbb43bc9/public_url)
-
-
-![LFCS Certified](/assets/lfcs-linux-foundation-certified-systems-administrator.2.png)
+[![LFCS Certified](/assets/lfcs-linux-foundation-certified-systems-administrator.2.png)](https://www.credly.com/badges/47e41727-76a8-4299-827b-52dccbb43bc9/public_url)
 _LFCS Certified_
