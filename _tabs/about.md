@@ -16,3 +16,10 @@ See you in the next blog post. :)
 
 [![LFCS Certified](/assets/lfcs-linux-foundation-certified-systems-administrator.2.png)](https://www.credly.com/badges/47e41727-76a8-4299-827b-52dccbb43bc9/public_url)
 _LFCS Certified_
+
+### _Update 12-03-2023_
+
+Recently just completed my entry level python institute exam PCEP, and will probably move on to the PCAP level for my next cert, we shall see.
+
+[![PCEP certified](/assets/pcep-30-02-pcep-certified-entry-level-python-programmer.png)](https://www.credly.com/badges/bc743aac-74be-4f5f-9853-ce306cbd0d56/public_url)
+_PCEP Certified_
