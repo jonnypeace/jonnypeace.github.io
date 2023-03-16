@@ -6,7 +6,11 @@ tags: [firewall,ufw,hosts.deny,hosts.allow]
 ---
 # Possible way to Strengthen Ubuntu Security
 
-Something i'm noticing in my UFW logs on my VPS (internet facing), are a number of syn blocks from what i suspect will be hackers, so many on my contabo server (~ 4000 i've got logged just now), it's difficult to keep up. A cross section of the traffic reveals Russia, Bulgaria, USA and so on. I will leave this blog up, for this use case. It might be overkill, and i might break something, in which case i'll take it down.
+_Update 16/03/2023_ This never did break anything, but worth pointing out that i decided to remove this server (well actually, i left it dormant for about 4 months, with no search engine finding it (so nobody should find it) and let it gather ip addresses that shouldn't be focusing on it - i then sent the data to crowdsec). Also worth mentioning, this will only work with programmes that work with the tcp wrapper hosts deny/allow. I usually have UFW set up with rate limiting on open ports, and the rest are blocked. So, the script below does no further analysis but filter IP addresses which have broken the UFW firewall rules, set by yourself. I know firewalld allows the use of a ban ip text file which would be better. I might also update with an iptables solution using ipset... to be continued...
+
+Something i'm noticing in my UFW logs on my VPS (internet facing), are a number of syn blocks from what i suspect will be hackers / bots, so many on my contabo server (~ 4000 i've got logged just now), it's difficult to keep up. A cross section of the traffic reveals Russia, Bulgaria, USA and so on. I will leave this blog up, for this use case. It might be overkill, and i might break something, in which case i'll take it down.
+
+
 
 Check the number of ip's in your UFW logs that have been blocked.
 
