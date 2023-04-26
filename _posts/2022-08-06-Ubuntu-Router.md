@@ -7,6 +7,10 @@ tags: [servers,homelab,bash,routing,firewall,ubuntu]
 
 # Ubuntu Router
 
+_Update 26-04-2023_
+
+Around 3 months ago I upgraded to a N5105 5 port 2.5gb router using the exact same set up, after upgrading my LAN to full 1gbps fibre. I never stumbled across any issues with the raspberry pi setup, but will issue a blog update with new setup :)
+
 I've been using my raspberry pi4 with 2 extra USB3 to LAN Gb adapters for a few months and it has felt quite stable for a routing device. My ISP speed is 65Mbps Download and 18Mbps Upload, and with the lack of AES, i've not attempted to do VPN traffic, but i have tested it with openelec, and it was able to push through my ISP download speed, but it might struggle if you have a better internet connection.
 
 ## So, the Ubuntu router
