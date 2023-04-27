@@ -101,7 +101,6 @@ function drive_hdd {
 function updater {
 
 now=$(printf '%(%Y-%m-%d)T\n')
-maria=$(which mariadb)
 
 for i in $drive_list
 do
@@ -127,13 +126,13 @@ do
 	statement="INSERT INTO stats (Date,HDDdefect,NonMedium,HealthStatus,HDD,ReadErr,WriteErr,Serial) VALUES
 	('$now', '$hd_grow', '$hd_non', '$hd_health', '$i', '$hd_read', '$hd_write', '$serial')"
 
-	$maria health -u hdd << EOF
+	mariadb health -u hdd << EOF
 	$statement
 EOF
 	if [[ $? == 0 ]]
 	then
-		echo -e "\nData added successfully for $i\n\n"
-		$maria health -u hdd -e "SELECT * FROM stats WHERE hdd = '$i'"
+		printf '\n%s\n\n' "Data added successfully for $i"
+		mariadb health -u hdd -e "SELECT * FROM stats WHERE hdd = '$i'"
 	else
 		echo "Something went wrong"
 	fi
