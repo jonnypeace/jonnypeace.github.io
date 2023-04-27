@@ -64,8 +64,7 @@ drive_list="$d1 $d2"
 function helper {
 	echo "Usage:
 
-	This script is for 4 x SAS drives, but might update this in future for SATA and
-	more dynamic number of drives.
+	This script is for 2 x SATA drives.
 
 	./health-hdd.sh -h (this helper)
 	./health-hdd.sh -u (run the updater, and update the database)
@@ -114,7 +113,6 @@ function drive_hdd {
 function updater {
 
 now=$(printf '%(%Y-%m-%d)T\n')
-maria=$(which mariadb)
 
 for i in $drive_list
 do
@@ -140,13 +138,13 @@ do
 	statement="INSERT INTO stats (Date,RawRead,SpinRetry,ReallocSector,HDD,OfflineUncorr,CurrPendSect,Serial) VALUES
 	('$now', '$raw_read', '$spin_retry', '$real_sect', '$i', '$off_uncor', '$curr_pend_sect', '$serial')"
 
-	$maria health -u hdd << EOF
+	mariadb health -u hdd << EOF
 	$statement
 EOF
 	if [[ $? == 0 ]]
 	then
 		printf '\n%s\n\n' "Data added successfully for $i"
-		$maria health -u hdd -e "SELECT * FROM stats WHERE hdd = '$i'"
+		mariadb health -u hdd -e "SELECT * FROM stats WHERE hdd = '$i'"
 	else
 		echo "Something went wrong"
 	fi
