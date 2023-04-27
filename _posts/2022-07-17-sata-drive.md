@@ -9,6 +9,10 @@ tags: [mariadb,sata,smartctl,smartmontools,database]
 
 If anyone else buys older drives on eBay, you will soon realise the importance of keeping tabs on your hard drives, quickly. So, i created this to keep track of aging hard drives, but obviously a good idea to keep track with new hard drives also.
 
+## Potential improves
+
+* Organise output based on drive serial (on the todo list one rainy sunday afternoon)
+
 ## Create Database
 
 I will assume you know how to enter mariadb, if not, i might come back here and update.
@@ -141,7 +145,7 @@ do
 EOF
 	if [[ $? == 0 ]]
 	then
-		echo -e "\nData added successfully for $i\n\n"
+		printf '\n%s\n\n' "Data added successfully for $i"
 		$maria health -u hdd -e "SELECT * FROM stats WHERE hdd = '$i'"
 	else
 		echo "Something went wrong"
