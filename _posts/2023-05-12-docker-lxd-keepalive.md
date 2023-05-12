@@ -2,7 +2,7 @@
 title: High Availability with KeepaliveD-Docker-LXD
 date: 2023-04-28 13:00
 categories: [homelab, Docker, keepalived, LXD, bash, high availability]
-tags: [omelab, Docker, keepalived, LXD, bash, high availability]
+tags: [homelab, Docker, keepalived, LXD, bash, high availability]
 ---
 
 # Docker-LXD-KeepaliveD
@@ -11,7 +11,7 @@ This should be a _mostly straight forward_ setup. There are plenty other ways to
 
 Also, this would work better if you are in an LXD cluster, which is out of scope for this, but will add a short section about it further down.
 
-Also also, instead of a network share to synchronize the containers, you should probably use microceph with LXD (microcloud), which would also handle migration much better, but for now, i'll go with network share, and will probably add a bit with microceph later.
+Also also, instead of a network share to synchronize the containers, you should probably use microceph with LXD (microcloud), which would also handle migration much better, but for now, i'll go with network share, and will probably add a bit with microceph later - i've not tried it with docker, so we'll see how that goes :) .
 
 ## Git Repo
 
