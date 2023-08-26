@@ -13,15 +13,15 @@ This is a useful programme for archiving collections of your blu-rays or DVDs, a
 
 The latest/stable version is too old, so you need to install from latest/edge.
 
-'''bash
+```bash
 sudo snap install makemkv --channel=latest/edge
-'''
+```
 
 And then all that is left to do is allow snap access to your dvd/blu-ray drive
 
-'''bash
+```bash
 sudo snap connect makemkv:optical-write :optical-drive
-'''
+```
 
 To complete the installation, makemkv offer a free beta license, or you can support their cause. Link below...
 
