@@ -49,4 +49,6 @@ lxc config device add code-server codeserverPort proxy listen=tcp:0.0.0.0:8080 c
 
 ```
 
+On your laptop, you can access via localhost:8080, but should be discoverable with your laptop ip address on port 8080 also.
+
 Obviously, you'll want firewall rules in place here, but this will get you up and running.
