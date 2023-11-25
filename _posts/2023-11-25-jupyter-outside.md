@@ -42,3 +42,66 @@ I've chosen a comma seperated string, which could be any delimter really, and sp
 ```python
 args_list: list = str(NB_ARGS).split(',')
 ```
+
+Custom css for notebook table of contents menu. Can be wrapped in it's own style tags and added automatically within your notebook with a custom .py script, or added manually. Apparently the nbconvert should do this with a _static/custom.css, but I haven't figure out why it doesn't work with me yet.
+
+```css
+#t-o-c {
+position: fixed;
+top: 50px;
+right: 50px;
+width: 250px;
+background-color: #4b4444;
+border: 1px solid #ddd;
+padding: 10px;
+border-radius: 5px;
+-webkit-box-shadow: 0 0 1em #777777;
+-moz-box-shadow: 0 0 1em #777777;
+-webkit-border-bottom-left-radius: 5px;
+-moz-border-radius-bottomleft: 5px;
+text-align: left;
+max-height: 70%;
+overflow: auto;
+}
+
+#t-o-c ul {
+list-style: none;
+margin: 0;
+padding: 0;
+}
+
+#t-o-c li {
+margin: 0;
+padding: 0;
+}
+
+#t-o-c a {
+text-decoration: none;
+}
+
+#t-o-c a:hover {
+text-decoration: underline;
+}
+
+```
+
+In the Jupyter notebook, where the table of contents is...
+
+```html
+<div id="t-o-c">
+  <h2>Table of Contents</h2>
+  <ul>
+    <li><a href="#section1">Section 1</a></li>
+    <li><a href="#section2">Section 2</a></li>
+    <li><a href="#section3">Section 3</a></li>
+  </ul>
+</div>
+```
+
+And to link to sections of the notebook, i.e. section1
+
+```markdown
+<h3 id="section1">
+1. Section 1
+</h3>
+```
