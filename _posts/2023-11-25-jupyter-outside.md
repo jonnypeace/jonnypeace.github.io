@@ -105,3 +105,16 @@ And to link to sections of the notebook, i.e. section1
 1. Section 1
 </h3>
 ```
+
+With the table of contents now visible, a solution i've found to auto scale my plotly graphs etc, is to get a measure of the display pixels and scale about 75%
+
+```python
+import tkinter
+root = tkinter.Tk()
+resolution_width = root.winfo_screenwidth()
+resolution_height = root.winfo_screenheight()
+
+# Update the plotly layout based on resolution width
+fig.update_layout(width=round(resolution_width*0.75,0))
+```
+
