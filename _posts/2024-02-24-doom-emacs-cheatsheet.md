@@ -5,8 +5,6 @@ categories: [doom, emacs,cheatsheet]
 tags: [doom,emacs,cheatsheet]
 ---
 
-# Doom Emacs Cheat Sheet
-
 Doom Emacs enhances Emacs by configuring it with sane defaults and adding a modern UI, among other improvements. Here's a quick cheat sheet to get you started with Doom Emacs.
 
 ## General
