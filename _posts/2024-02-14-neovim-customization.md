@@ -13,18 +13,18 @@ First we need to install (place the plug.vim into the autoload directory) vim-pl
 curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 ```
 
-## Install npm and pyright
+## Install npm and diagnostic language servers
 
 ```bash
 sudo pacman -S npm
-sudo npm install -g pyright yaml-language-server vscode-json-languageserver bash-language-server
+sudo npm install -g pyright yaml-language-server vscode-json-languageserver bash-language-server typescript typescript-language-server vscode-html-languageserver-bin vscode-css-languageserver-bin
 ```
 
 ## Neovim commands
 
 Ok, we can update, and install specific packages, but using our config with TSInstall by itself you will install support for 200+ languages at the time of writing. I'll put the commands here for explicitly installing python.
 
-```bash
+```
 :PlugInstall # installs plugins
 :TSInstall python # installs python
 :TSUpdate # updates all installed language parsers to their latest versions.
@@ -105,6 +105,15 @@ require'lspconfig'.jsonls.setup{
 
 -- Bash
 require'lspconfig'.bashls.setup{}
+
+-- JavaScript and TypeScript
+require'lspconfig'.tsserver.setup{}
+
+-- HTML
+require'lspconfig'.html.setup{}
+
+-- CSS
+require'lspconfig'.cssls.setup{}
 EOF
 
 " toggle diagnostics
