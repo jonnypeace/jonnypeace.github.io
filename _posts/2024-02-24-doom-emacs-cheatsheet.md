@@ -94,7 +94,7 @@ npm install pyright pyright-langserver
 
 ### Inside the config.el
 
-```emacs
+```Elisp
 ;; REMEMBER TO CHANGE THE PATH TO YOUR NODE-MODULES .bin DIRECTORY
 (after! tramp
   (setq tramp-remote-path (append tramp-remote-path '("/home/jonny/node_modules/.bin/"))))
@@ -139,7 +139,7 @@ npm install pyright pyright-langserver
 
 ### Inside the packages.el
 
-```emacs
+```Elisp
 (package! pyvenv)
 (package! eglot)
 ```
