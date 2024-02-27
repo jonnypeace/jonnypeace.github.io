@@ -77,7 +77,7 @@ This cheat sheet covers some basic Doom Emacs functionality. Explore the Doom Em
 
 ### Inside the init.el, uncomment
 
-```emacs
+```lisp
 (python +lsp)
 lsp
 ```
@@ -94,7 +94,7 @@ npm install pyright pyright-langserver
 
 ### Inside the config.el
 
-```Elisp
+```lisp
 ;; REMEMBER TO CHANGE THE PATH TO YOUR NODE-MODULES .bin DIRECTORY
 (after! tramp
   (setq tramp-remote-path (append tramp-remote-path '("/home/jonny/node_modules/.bin/"))))
@@ -139,7 +139,7 @@ npm install pyright pyright-langserver
 
 ### Inside the packages.el
 
-```Elisp
+```lisp
 (package! pyvenv)
 (package! eglot)
 ```
