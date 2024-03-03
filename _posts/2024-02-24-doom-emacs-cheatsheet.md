@@ -11,18 +11,18 @@ Doom Emacs enhances Emacs by configuring it with sane defaults and adding a mode
 
 SPC is your space key
 
-| Command                  | Description                              |
-|--------------------------|------------------------------------------|
-| `SPC .`                  | Open file finder                         |
-| `SPC x`                  | Execute command                          |
-| `SPC b b`                | Switch buffer                            |
-| `SPC b d`                | Kill buffer                              |
-| `SPC b R`                | Revert buffer without confirmation       |
-| `SPC w /`                | Split window vertically                  |
-| `SPC w -`                | Split window horizontally                |
-| `SPC w d` or `SPC w c`   | Close current window                     |
-| `SPC TAB`                | Switch to last buffer                    |
-| `SPC w w`                | Switch window                            |
+| Command                | Description                        |
+|------------------------|------------------------------------|
+| `SPC .`                | Open file finder                   |
+| `SPC x`                | Execute command                    |
+| `SPC b b`              | Switch buffer                      |
+| `SPC b d`              | Kill buffer                        |
+| `SPC b R`              | Revert buffer without confirmation |
+| `ctrl w v`             | Split window vertically            |
+| `ctrl w s`             | Split window horizontally          |
+| `SPC w d` or `SPC w c` | Close current window               |
+| `SPC TAB`              | Switch to last buffer              |
+| `SPC w w`              | Switch window                      |
 
 ## Code and Text Editing
 
