@@ -52,4 +52,4 @@ If everything is configured correctly, you should now have a working HP printer 
 
 ## Conclusion
 
-Setting up an HP printer on Arch Linux might require a few extra steps, but the process is straightforward once you know what packages are needed and how to enable the necessary services. I hope this guide helps you get your HP printer up and running smoothly on Arch Linux. This setup works for the HP Envy 5000 Series, happy printing :)
+Setting up an HP printer on Arch Linux might require a few extra steps, but the process is straightforward once you know what packages are needed and how to enable the necessary services. I hope this guide helps you get your HP printer up and running smoothly on Arch Linux.
