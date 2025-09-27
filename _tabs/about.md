@@ -40,3 +40,14 @@ Recently just completed my entry level python institute exam PCEP, and will prob
 
 [![PCEP certified](/assets/pcep-30-02-pcep-certified-entry-level-python-programmer.png)](https://www.credly.com/badges/bc743aac-74be-4f5f-9853-ce306cbd0d56/public_url)
 _PCEP Certified_
+
+### _Update 27-09-2025_
+
+It's been a while since my last blog post, I've been super busy with work and upskilling. Around April 2023, I started a new role in Machine Learning using python. I've since thinned out a lot of the servers I had running, and centralised into one. I was so busy with work and upskilling, I needed to keep things more simple, so now...
+
+* A workstation/server using Ryzen 5650g Pro, and ECC RAM, and a RTX5060Ti. This has around 4TB of available storage in Raid5 using ZFS. I used Ubuntu Desktop so i could still get some Desktop use out of it. While I do have the linux router  with VLANS, i've decided to sandbox a network on LXD with firewall rules, so I can expose some parts of this server with wireguard to VPS (without opening ports), mainly a Flask App i've created, and Open WebUI so I can have my own privacy AI.
+* 1 x raspberry pi working as DNS server.
+* 1 x 5 port 2.5Gbe Ubuntu Router
+* VPS, which is my gateway to services running at home. 
+
+Sacrificed high availability for something smaller to manage, and less power consumption.
