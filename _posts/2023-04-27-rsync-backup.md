@@ -3,6 +3,7 @@ title: Automate rsync backups
 date: 2023-04-27 20:00
 categories: [homelab, rsync, backup, automate, health]
 tags: [rsync, backup, smartmontools]
+published: false
 ---
 
 ## The why..

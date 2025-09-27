@@ -3,6 +3,7 @@ title: Run Jupyer Notebooks from the Outside
 date: 2023-11-25 11:00
 categories: [python,data science, jupyter, nbconvert, args]
 tags: [python,data science, jupyter, nbconvert, args]
+published: false
 ---
 
 ## Very Quick Blog Entry....

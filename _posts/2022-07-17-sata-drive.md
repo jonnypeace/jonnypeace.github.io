@@ -3,6 +3,7 @@ title: SATA 2 x Drive Health Database
 date: 2022-07-17 14:00:00 000
 categories: [mariadb,sata,smartctl,smartmontools,database]
 tags: [mariadb,sata,smartctl,smartmontools,database]
+published: false
 ---
 
 # Purpose

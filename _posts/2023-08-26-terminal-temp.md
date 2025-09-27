@@ -3,6 +3,7 @@ title: Quick Terminal CPU temp
 date: 2023-08-26 13:00
 categories: [homelab, CPU, Temperature, Thermometer]
 tags: [cpu, temperature]
+published: false
 ---
 
 # The why?

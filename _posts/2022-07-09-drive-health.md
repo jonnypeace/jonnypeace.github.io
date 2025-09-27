@@ -3,6 +3,7 @@ title: SAS 4 x Drive Health Database
 date: 2022-07-09 18:00:00 -500
 categories: [mariadb,smartctl,smartmontools,database]
 tags: [mariadb,smartctl,smartmontools,database]
+published: false
 ---
 
 # Purpose

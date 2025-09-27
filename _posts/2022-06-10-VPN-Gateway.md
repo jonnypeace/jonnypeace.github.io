@@ -3,6 +3,7 @@ title: Ubuntu 20.04 VPN Gateway
 date: 2022-06-10 19:30 -500
 categories: [homelab, project, vpn, routing]
 tags: [servers,homelab,bash,vpn,routing,nordvpn,iptables]
+published: false
 ---
 
 # VPN-gateway
