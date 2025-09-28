@@ -21,12 +21,12 @@ timezone: Europe/London
 # jekyll-seo-tag settings › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/usage.md
 # ↓ --------------------------
 
-title: Peace Linux Documentation                          # the main title
+title: HomeLab Hub                         # the main title
 
-tagline: For HomeLab Projects  # it will display as the sub-title
+tagline: Your one-stop for bash, python & Linux magic  # it will display as the sub-title
 
 description: >-                        # used by seo meta and the atom feed
-  Document site for scripts, code and homelab projects
+  Document site for scripts, code, virtualization and homelab projects
 
 # fill in the protocol & hostname for your site, e.g., 'https://username.github.io'
 url: 'https://github.com/jonnypeace/jonnypeace.github.io.git'
