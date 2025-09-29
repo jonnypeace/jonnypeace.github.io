@@ -1,8 +1,8 @@
 ---
 title: High Availability with KeepaliveD-Docker-LXD
 date: 2023-04-28 13:00
-categories: [homelab, Docker, keepalived, LXD, bash, high availability]
-tags: [homelab, Docker, keepalived, LXD, bash, high availability]
+categories: [homelab, Docker, keepalived, lxd, bash, high availability]
+tags: [homelab, Docker, keepalived, lxd, bash, high availability]
 ---
 
 # Docker-LXD-KeepaliveD
