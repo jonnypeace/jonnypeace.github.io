@@ -1,0 +1,413 @@
+<!DOCTYPE html><html lang="en" ><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><meta name="generator" content="Jekyll v4.2.2" /><meta property="og:title" content="Simple Incremental Backup Script" /><meta property="og:locale" content="en" /><meta name="description" content="update: 10-02-2024" /><meta property="og:description" content="update: 10-02-2024" /><link rel="canonical" href="https://github.com/jonnypeace/jonnypeace.github.io.git/posts/inc-tar/" /><meta property="og:url" content="https://github.com/jonnypeace/jonnypeace.github.io.git/posts/inc-tar/" /><meta property="og:site_name" content="HomeLab Hub" /><meta property="og:type" content="article" /><meta property="article:published_time" content="2022-06-10T19:00:00+01:00" /><meta name="twitter:card" content="summary" /><meta property="twitter:title" content="Simple Incremental Backup Script" /><meta name="twitter:site" content="@JonnyLinuxPeace" /> <script type="application/ld+json"> {"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-02-11T11:11:46+00:00","datePublished":"2022-06-10T19:00:00+01:00","description":"update: 10-02-2024","headline":"Simple Incremental Backup Script","mainEntityOfPage":{"@type":"WebPage","@id":"https://github.com/jonnypeace/jonnypeace.github.io.git/posts/inc-tar/"},"url":"https://github.com/jonnypeace/jonnypeace.github.io.git/posts/inc-tar/"}</script><title>Simple Incremental Backup Script | HomeLab Hub</title><link rel="apple-touch-icon" sizes="180x180" href="/assets/img/favicons/apple-touch-icon.png"><link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicons/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png"><link rel="manifest" href="/assets/img/favicons/site.webmanifest"><link rel="shortcut icon" href="/assets/img/favicons/favicon.ico"><meta name="apple-mobile-web-app-title" content="HomeLab Hub"><meta name="application-name" content="HomeLab Hub"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="dns-prefetch" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://fonts.googleapis.com" ><link rel="dns-prefetch" href="https://fonts.googleapis.com" ><link rel="preconnect" href="https://cdn.jsdelivr.net" ><link rel="dns-prefetch" href="https://cdn.jsdelivr.net" ><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.11.2/css/all.min.css"><link rel="stylesheet" href="/assets/css/style.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css"> <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script> <script type="text/javascript"> class ModeToggle { static get MODE_KEY() { return "mode"; } static get MODE_ATTR() { return "data-mode"; } static get DARK_MODE() { return "dark"; } static get LIGHT_MODE() { return "light"; } static get ID() { return "mode-toggle"; } constructor() { if (this.hasMode) { if (this.isDarkMode) { if (!this.isSysDarkPrefer) { this.setDark(); } } else { if (this.isSysDarkPrefer) { this.setLight(); } } } let self = this; /* always follow the system prefers */ this.sysDarkPrefers.addEventListener("change", () => { if (self.hasMode) { if (self.isDarkMode) { if (!self.isSysDarkPrefer) { self.setDark(); } } else { if (self.isSysDarkPrefer) { self.setLight(); } } self.clearMode(); } self.notify(); }); } /* constructor() */ get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); } get isSysDarkPrefer() { return this.sysDarkPrefers.matches; } get isDarkMode() { return this.mode === ModeToggle.DARK_MODE; } get isLightMode() { return this.mode === ModeToggle.LIGHT_MODE; } get hasMode() { return this.mode != null; } get mode() { return sessionStorage.getItem(ModeToggle.MODE_KEY); } /* get the current mode on screen */ get modeStatus() { if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) { return ModeToggle.DARK_MODE; } else { return ModeToggle.LIGHT_MODE; } } setDark() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE); } setLight() { $('html').attr(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE); sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE); } clearMode() { $('html').removeAttr(ModeToggle.MODE_ATTR); sessionStorage.removeItem(ModeToggle.MODE_KEY); } /* Notify another plugins that the theme mode has changed */ notify() { window.postMessage({ direction: ModeToggle.ID, message: this.modeStatus }, "*"); } } /* ModeToggle */ const toggle = new ModeToggle(); function flipMode() { if (toggle.hasMode) { if (toggle.isSysDarkPrefer) { if (toggle.isLightMode) { toggle.clearMode(); } else { toggle.setLight(); } } else { if (toggle.isDarkMode) { toggle.clearMode(); } else { toggle.setDark(); } } } else { if (toggle.isSysDarkPrefer) { toggle.setLight(); } else { toggle.setDark(); } } toggle.notify(); } /* flipMode() */ </script><body data-spy="scroll" data-target="#toc" data-topbar-visible="true"><div id="sidebar" class="d-flex flex-column align-items-end"><div class="profile-wrapper text-center"><div id="avatar"> <a href="/" class="mx-auto"> <img src="/assets/motherboard.jpg" alt="avatar" onerror="this.style.display='none'"> </a></div><div class="site-title mt-3"> <a href="/">HomeLab Hub</a></div><div class="site-subtitle font-italic">Your one-stop for bash, python & Linux magic</div></div><ul class="w-100"><li class="nav-item"> <a href="/" class="nav-link"> <i class="fa-fw fas fa-home ml-xl-3 mr-xl-3 unloaded"></i> <span>HOME</span> </a><li class="nav-item"> <a href="/categories/" class="nav-link"> <i class="fa-fw fas fa-stream ml-xl-3 mr-xl-3 unloaded"></i> <span>CATEGORIES</span> </a><li class="nav-item"> <a href="/tags/" class="nav-link"> <i class="fa-fw fas fa-tag ml-xl-3 mr-xl-3 unloaded"></i> <span>TAGS</span> </a><li class="nav-item"> <a href="/archives/" class="nav-link"> <i class="fa-fw fas fa-archive ml-xl-3 mr-xl-3 unloaded"></i> <span>ARCHIVES</span> </a><li class="nav-item"> <a href="/about/" class="nav-link"> <i class="fa-fw fas fa-info-circle ml-xl-3 mr-xl-3 unloaded"></i> <span>ABOUT</span> </a></ul><div class="sidebar-bottom mt-auto d-flex flex-wrap justify-content-center align-items-center"> <button class="mode-toggle btn" aria-label="Switch Mode"> <i class="fas fa-adjust"></i> </button> <span class="icon-border"></span> <a href="https://github.com/jonnypeace" aria-label="github" target="_blank" rel="noopener"> <i class="fab fa-github"></i> </a> <a href="https://twitter.com/JonnyLinuxPeace" aria-label="twitter" target="_blank" rel="noopener"> <i class="fab fa-twitter"></i> </a> <a href=" javascript:location.href = 'mailto:' + ['jonnypeace','outlook.com'].join('@')" aria-label="email" > <i class="fas fa-envelope"></i> </a> <a href="/feed.xml" aria-label="rss" > <i class="fas fa-rss"></i> </a></div></div><div id="topbar-wrapper"><div id="topbar" class="container d-flex align-items-center justify-content-between h-100 pl-3 pr-3 pl-md-4 pr-md-4"> <span id="breadcrumb"> <span> <a href="/"> Home </a> </span> <span>Simple Incremental Backup Script</span> </span> <i id="sidebar-trigger" class="fas fa-bars fa-fw"></i><div id="topbar-title"> Post</div><i id="search-trigger" class="fas fa-search fa-fw"></i> <span id="search-wrapper" class="align-items-center"> <i class="fas fa-search fa-fw"></i> <input class="form-control" id="search-input" type="search" aria-label="search" autocomplete="off" placeholder="Search..."> </span> <span id="search-cancel" >Cancel</span></div></div><div id="main-wrapper" class="d-flex justify-content-center"><div id="main" class="container pl-xl-4 pr-xl-4"><div class="row"><div id="core-wrapper" class="col-12 col-lg-11 col-xl-9 pr-xl-4"><div class="post pl-1 pr-1 pl-md-2 pr-md-2"><h1 data-toc-skip>Simple Incremental Backup Script</h1><div class="post-meta text-muted"> <span> Posted <em class="" data-ts="1654884000" data-df="ll" data-toggle="tooltip" data-placement="bottom"> Jun 10, 2022 </em> </span> <span> Updated <em class="" data-ts="1707649906" data-df="ll" data-toggle="tooltip" data-placement="bottom"> Feb 11, 2024 </em> </span><div class="d-flex justify-content-between"> <span> By <em> <a href="https://twitter.com/JonnyLinuxPeace">jonny peace</a> </em> </span><div> <span class="readtime" data-toggle="tooltip" data-placement="bottom" title="1326 words"> <em>7 min</em> read</span></div></div></div><div class="post-content"><p><em>update: 10-02-2024</em></p><h1 id="the-concept">The Concept</h1><ul><li>The backup script holds onto 2 weeks worth of DAILY incremental backups.<li>This backup solution uses tar with gz compression or without compression with the -n flag.<li>Once you’ve ensured that you are backing up all relevant files/directories, run on a crontab at a time which suits you.<li>If you have made an error during testing, it is <em>BEST TO REMOVE ALL THE TAR files (including the file.inc) and start over, because the file.inc won’t know what’s changes you’ve made</em>.<li>I’ve included a -h flag for help, which provides an example of backup and recovery. In the examples provided, i’ve named this script backup.sh.</ul><p>Why this and not use tar directly? Well…</p><ul><li>You could use tar directly, but the idea here is to manage a little more automation for tar.. Including:<ul><li>2 weeks worth of DAILY backups always organized<li>backups are incremental and automated therefore taking up less disk space.<li>Easier to remember syntax for recovery. What use is a backup, if you cant recover.<li>Compression and verbose enabled by default</ul></ul><p>You can either copy &amp; paste the script directly from here, or copy from the repo.</p><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+</pre><td class="rouge-code"><pre>git clone https://github.com/jonnypeace/backups-tar.gzip.git
+</pre></table></code></div></div><h2 id="the-backup--recovery-script"><span class="mr-2">The backup &amp; recovery script</span><a href="#the-backup--recovery-script" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><div class="language-bash highlighter-rouge"><div class="code-header"> <span data-label-text="Shell"><i class="fas fa-code small"></i></span> <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+</pre><td class="rouge-code"><pre><span class="c">#!/bin/bash</span>
+
+<span class="c"># Author: Jonny Peace</span>
+
+<span class="c">#### If includes_file and dirfrom, then exit with error.</span>
+<span class="k">if</span> <span class="o">[[</span> <span class="nv">$*</span> <span class="o">=</span>~ <span class="s1">' -b '</span> <span class="o">&amp;&amp;</span> <span class="nv">$*</span> <span class="o">=</span>~ <span class="s1">' -i '</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+  </span><span class="nb">printf</span> <span class="s1">'\033[91m%s\033[0m\n\n'</span> <span class="s2">"When using -i, do not use -b or errors occur. You may as well add all directories to the include file and start again"</span>
+  <span class="nb">exit </span>1
+<span class="k">fi
+
+function </span>sense_check <span class="o">{</span>
+  <span class="nb">echo</span> <span class="s2">"Destination Directory set: </span><span class="k">${</span><span class="nv">dirto</span>:?<span class="s1">'-d (destination) is not set. Exiting.'</span><span class="k">}</span><span class="s2">"</span>
+  <span class="nv">backfile</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">backfile</span><span class="k">:-</span><span class="nv">backupfile</span><span class="k">}</span><span class="s2">"</span>
+<span class="o">}</span>
+
+<span class="k">function </span>check_includes <span class="o">{</span>
+  <span class="o">[[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="s2">"</span><span class="nv">$includes_file</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span>
+    <span class="nb">echo</span> <span class="s2">"Error: Includes File (-i) is not an actual file </span><span class="k">${</span><span class="nv">includes_file</span><span class="k">:-</span><span class="nv">Includes_File_Not_Set</span><span class="k">}</span><span class="s2">"</span> <span class="o">&amp;&amp;</span>
+    <span class="nb">exit </span>1   
+<span class="o">}</span>
+
+<span class="k">function </span>check_excludes <span class="o">{</span>
+  <span class="o">[[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="s2">"</span><span class="nv">$excludes_file</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span>
+    <span class="nb">echo</span> <span class="s2">"Error: Excludes File (-e) is not an actual file </span><span class="k">${</span><span class="nv">excludes_file</span><span class="k">:-</span><span class="nv">Excludes_File_Not_Set</span><span class="k">}</span><span class="s2">"</span> <span class="o">&amp;&amp;</span>
+    <span class="nb">exit </span>1   
+<span class="o">}</span>
+
+<span class="k">function </span>check_dirbk <span class="o">{</span>
+  <span class="o">[[</span> <span class="o">!</span> <span class="nt">-d</span> <span class="s2">"</span><span class="nv">$dirbk</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span>
+    <span class="nb">echo</span> <span class="s2">"Error: Destination directory '</span><span class="nv">$dirbk</span><span class="s2">' does not exist."</span> <span class="o">&amp;&amp;</span>
+    <span class="nb">exit </span>1
+<span class="o">}</span>
+
+<span class="k">function </span>check_backup_dir <span class="o">{</span>
+  <span class="o">[[</span> <span class="o">!</span> <span class="nt">-d</span> <span class="s2">"</span><span class="nv">$dirfrom</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span>
+    <span class="nb">echo</span> <span class="s2">"Error: Backup Directory (-b) does not exist; </span><span class="k">${</span><span class="nv">dirfrom</span><span class="k">:-</span><span class="nv">Backup_Dir_Not_Set</span><span class="k">}</span><span class="s2">, exitting."</span> <span class="o">&amp;&amp;</span>
+    <span class="nb">exit </span>1
+<span class="o">}</span>
+
+<span class="c"># This function will provide the tar.gz backup archive utilizing the incremental file for monitoring.</span>
+<span class="k">function </span>backup <span class="o">{</span>
+
+  sense_check
+  <span class="nb">mkdir</span> <span class="nt">-p</span> <span class="s2">"</span><span class="nv">$dirto</span><span class="s2">"</span>
+  <span class="c"># incremental file which keeps track of changes (no need to change this)</span>
+  <span class="nv">incfile</span><span class="o">=</span>file.inc
+
+  <span class="c"># date for directory and .tgz file naming</span>
+  <span class="c"># format example 2023-05-28_23.10.05</span>
+  <span class="c"># yyyy-mm-dd_h.m.s </span>
+  <span class="nv">day</span><span class="o">=</span><span class="si">$(</span><span class="nb">printf</span> <span class="s1">'%(%Y-%m-%d_%H.%M.%S)T\n'</span><span class="si">)</span>
+
+  <span class="c"># Enable nullglob to ensure arrays are empty if no matching files are found</span>
+  <span class="nb">shopt</span> <span class="nt">-s</span> nullglob
+  <span class="c">#Check number of directories with week-ending, and count them</span>
+  <span class="nv">dirnum</span><span class="o">=</span>0
+  <span class="k">for </span><span class="nb">dir </span><span class="k">in</span> <span class="s2">"</span><span class="nv">$dirto</span><span class="s2">"</span>/<span class="k">*</span>week-ending<span class="k">*</span>/<span class="p">;</span> <span class="k">do</span>
+      <span class="o">[[</span> <span class="nt">-d</span> <span class="s2">"</span><span class="nv">$dir</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> <span class="o">((</span>dirnum++<span class="o">))</span>
+  <span class="k">done</span>
+
+  <span class="c"># My aim is to keep two weeks of backups at all times.</span>
+  <span class="c"># If you want to adjust this, adjust the number 3 accordingly.</span>
+  <span class="c"># Example: 3 will keep 2 full weeks of dailing backups.</span>
+  <span class="nv">backup_dirs</span><span class="o">=(</span><span class="s2">"</span><span class="nv">$dirto</span><span class="s2">"</span>/<span class="k">*</span>week-ending<span class="k">*</span>/<span class="o">)</span>
+  <span class="k">if</span> <span class="o">[[</span> <span class="k">${#</span><span class="nv">backup_dirs</span><span class="p">[@]</span><span class="k">}</span> <span class="nt">-ge</span> 3 <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+      <span class="c"># The naming convention includes sortable date strings,</span>
+      <span class="c"># simply sorting the names alphabetically should suffice.</span>
+      <span class="c"># More so if this directory is only used by this script.</span>
+      <span class="nv">oldest_dir</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">backup_dirs</span><span class="p">[0]</span><span class="k">}</span><span class="s2">"</span>
+      <span class="nb">echo</span> <span class="s2">"Removing oldest directory: </span><span class="nv">$oldest_dir</span><span class="s2">"</span>
+      <span class="nb">rm</span> <span class="nt">-r</span> <span class="s2">"</span><span class="nv">$oldest_dir</span><span class="s2">"</span>
+  <span class="k">fi
+
+  </span><span class="nv">tar_files</span><span class="o">=(</span><span class="s2">"</span><span class="nv">$dirto</span><span class="s2">"</span>/<span class="k">*</span>.tar <span class="s2">"</span><span class="nv">$dirto</span><span class="s2">"</span>/<span class="k">*</span>.tar.gz <span class="s2">"</span><span class="nv">$dirto</span><span class="s2">"</span>/<span class="k">*</span>.tgz<span class="o">)</span>
+  <span class="nv">filenum</span><span class="o">=</span><span class="k">${#</span><span class="nv">tar_files</span><span class="p">[@]</span><span class="k">}</span>
+  <span class="nb">shopt</span> <span class="nt">-u</span> nullglob
+
+  <span class="c"># Once 7 .tgz are created, move them to a new week-ending directory</span>
+  <span class="c"># If run daily on cron job, this will be a weeks worth of incremental backups</span>
+  <span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="nv">$filenum</span><span class="s2">"</span> <span class="nt">-ge</span> 7 <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nv">arch_dir</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">dirto</span><span class="k">}</span><span class="s2">/week-ending-</span><span class="k">${</span><span class="nv">day</span><span class="p">%_*</span><span class="k">}</span><span class="s2">"</span>
+    <span class="nb">mkdir</span> <span class="nt">-p</span> <span class="s2">"</span><span class="nv">$arch_dir</span><span class="s2">"</span>
+    <span class="nb">mv</span> <span class="s2">"</span><span class="nv">$dirto</span><span class="s2">"</span>/<span class="k">*</span>.tar<span class="k">*</span> <span class="s2">"</span><span class="nv">$arch_dir</span><span class="s2">"</span>
+    <span class="nb">mv</span> <span class="s2">"</span><span class="nv">$dirto</span><span class="s2">"</span>/<span class="s2">"</span><span class="nv">$incfile</span><span class="s2">"</span> <span class="s2">"</span><span class="nv">$arch_dir</span><span class="s2">"</span>
+  <span class="k">fi</span>
+
+  <span class="c"># Create .tgz file. Ideally this will work in a cron job, and you'll get daily backups</span>
+  <span class="c"># to exclude a directory after the tar command, example --exclude='/home/user/folder'</span>
+  <span class="nb">declare</span> <span class="nt">-a</span> args
+  <span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="k">${</span><span class="nv">no_comp</span><span class="k">}</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then
+    </span><span class="nv">args</span><span class="o">=(</span><span class="s2">"-vc"</span> <span class="s2">"-g"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">dirto</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">incfile</span><span class="k">}</span><span class="s2">"</span> <span class="s2">"-f"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">dirto</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">backfile</span><span class="k">}</span><span class="s2">-</span><span class="k">${</span><span class="nv">day</span><span class="k">}</span><span class="s2">.tar"</span><span class="o">)</span>
+  <span class="k">else
+    </span><span class="nv">args</span><span class="o">=(</span><span class="s2">"-vcz"</span> <span class="s2">"-g"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">dirto</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">incfile</span><span class="k">}</span><span class="s2">"</span> <span class="s2">"-f"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">dirto</span><span class="k">}</span><span class="s2">/</span><span class="k">${</span><span class="nv">backfile</span><span class="k">}</span><span class="s2">-</span><span class="k">${</span><span class="nv">day</span><span class="k">}</span><span class="s2">.tar.gz"</span><span class="o">)</span>
+  <span class="k">fi
+
+  if</span> <span class="o">[[</span> <span class="s2">"</span><span class="k">${</span><span class="nv">includes_file</span><span class="k">}</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="o">[[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="s2">"</span><span class="k">${</span><span class="nv">includes_file</span><span class="k">}</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> 
+      <span class="nb">echo</span> <span class="s2">"Includes File Not a File: </span><span class="k">${</span><span class="nv">includes_file</span><span class="k">}</span><span class="s2">"</span> <span class="o">&amp;&amp;</span> <span class="nb">exit </span>1
+    args+<span class="o">=(</span><span class="s2">"-T"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">includes_file</span><span class="k">}</span><span class="s2">"</span><span class="o">)</span>
+  <span class="k">else
+    </span>args+<span class="o">=(</span><span class="s2">"</span><span class="k">${</span><span class="nv">dirfrom</span><span class="k">}</span><span class="s2">"</span><span class="o">)</span>
+  <span class="k">fi
+
+  if</span> <span class="o">[[</span> <span class="s2">"</span><span class="k">${</span><span class="nv">excludes_file</span><span class="k">}</span><span class="s2">"</span> <span class="o">]]</span><span class="p">;</span> <span class="k">then</span>
+    <span class="o">[[</span> <span class="o">!</span> <span class="nt">-f</span> <span class="s2">"</span><span class="k">${</span><span class="nv">excludes_file</span><span class="k">}</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> 
+    <span class="nb">echo</span> <span class="s2">"Excludes File Not a File: </span><span class="k">${</span><span class="nv">excludes_file</span><span class="k">}</span><span class="s2">"</span> <span class="o">&amp;&amp;</span> <span class="nb">exit </span>1
+    <span class="nv">args</span><span class="o">=(</span><span class="s2">"-X"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">excludes_file</span><span class="k">}</span><span class="s2">"</span> <span class="s2">"</span><span class="k">${</span><span class="nv">args</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span><span class="o">)</span>
+
+  <span class="k">fi
+
+  </span><span class="nb">tar</span> <span class="s2">"</span><span class="k">${</span><span class="nv">args</span><span class="p">[@]</span><span class="k">}</span><span class="s2">"</span>
+<span class="o">}</span>
+
+<span class="c"># This function will recover the data, and requires all tar files from the backup directory and the incremental file.</span>
+<span class="c"># the -g /dev/null keeps tar happy.</span>
+<span class="k">function </span>recovery <span class="o">{</span>
+  sense_check
+  <span class="o">(</span><span class="nb">mkdir</span> <span class="nt">-p</span> <span class="s2">"</span><span class="nv">$dirto</span><span class="s2">"</span>
+  <span class="nb">shopt</span> <span class="nt">-s</span> nullglob
+  <span class="nb">shopt</span> <span class="nt">-s</span> globstar
+  <span class="k">for </span>file <span class="k">in</span> <span class="s2">"</span><span class="nv">$dirbk</span><span class="s2">"</span>/<span class="k">**</span>/<span class="k">*</span>.tar<span class="k">*</span><span class="p">;</span> <span class="k">do
+    </span><span class="nb">tar</span> <span class="nt">-vx</span> <span class="nt">-g</span> /dev/null <span class="nt">-f</span> <span class="s2">"</span><span class="nv">$file</span><span class="s2">"</span> <span class="nt">-C</span> <span class="s2">"</span><span class="nv">$dirto</span><span class="s2">"</span>
+  <span class="k">done</span><span class="o">)</span>
+<span class="o">}</span>
+
+<span class="c"># This loop relies on the commandline flags so it knows which function to choose.</span>
+<span class="c"># The reason for the if statements is to account for user input, and whether they include </span>
+<span class="c"># a forward slash at the end.</span>
+<span class="k">while </span><span class="nb">getopts </span>b:r:d:e:f:ni:h opt
+<span class="k">do
+  case</span> <span class="s2">"</span><span class="nv">$opt</span><span class="s2">"</span> <span class="k">in
+    
+    </span>b<span class="p">)</span> 
+      <span class="nv">dirfrom</span><span class="o">=</span><span class="s2">"</span><span class="nv">$OPTARG</span><span class="s2">"</span>
+      <span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="k">${</span><span class="nv">dirfrom</span>:0-1<span class="k">}</span><span class="s2">"</span> <span class="o">==</span> <span class="s1">'/'</span> <span class="o">]]</span> <span class="p">;</span> <span class="k">then </span><span class="nv">dirfrom</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">dirfrom</span>::-1<span class="k">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">fi
+      </span>check_backup_dir<span class="p">;;</span>
+    r<span class="p">)</span>
+      <span class="nv">dirbk</span><span class="o">=</span><span class="s2">"</span><span class="nv">$OPTARG</span><span class="s2">"</span>
+      <span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="k">${</span><span class="nv">dirbk</span>:0-1<span class="k">}</span><span class="s2">"</span> <span class="o">==</span> <span class="s1">'/'</span> <span class="o">]]</span> <span class="p">;</span> <span class="k">then </span><span class="nv">dirbk</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">dirbk</span>::-1<span class="k">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">fi
+      </span>check_dirbk <span class="p">;;</span>
+    d<span class="p">)</span>
+      <span class="nv">dirto</span><span class="o">=</span><span class="s2">"</span><span class="nv">$OPTARG</span><span class="s2">"</span>
+      <span class="k">if</span> <span class="o">[[</span> <span class="s2">"</span><span class="k">${</span><span class="nv">dirto</span>:0-1<span class="k">}</span><span class="s2">"</span> <span class="o">==</span> <span class="s1">'/'</span> <span class="o">]]</span> <span class="p">;</span> <span class="k">then </span><span class="nv">dirto</span><span class="o">=</span><span class="s2">"</span><span class="k">${</span><span class="nv">dirto</span>::-1<span class="k">}</span><span class="s2">"</span><span class="p">;</span> <span class="k">fi</span><span class="p">;;</span>
+    e<span class="p">)</span>
+      <span class="nv">excludes_file</span><span class="o">=</span><span class="s2">"</span><span class="nv">$OPTARG</span><span class="s2">"</span>
+      check_excludes <span class="p">;;</span>
+    n<span class="p">)</span>
+      <span class="nv">no_comp</span><span class="o">=</span><span class="s1">'true'</span> <span class="p">;;</span>
+    i<span class="p">)</span>
+      <span class="nv">includes_file</span><span class="o">=</span><span class="s2">"</span><span class="nv">$OPTARG</span><span class="s2">"</span>
+      check_includes<span class="p">;;</span>
+    f<span class="p">)</span>
+      <span class="nv">backfile</span><span class="o">=</span><span class="s2">"</span><span class="nv">$OPTARG</span><span class="s2">"</span> <span class="p">;;</span>
+    h<span class="p">)</span>
+    <span class="nb">cat</span> <span class="o">&lt;&lt;</span> <span class="no">EOF</span><span class="sh">
+
+    backup.sh script for backup and recovery.
+
+    Select -b for backup followed by backup directory
+    Select -r for recovery followed by location of backup directory
+    Select -d for destination followed by directory to restore or backup to
+    Select -f for name of backup file
+    Select -n for no compression
+    Select -e for excludes file
+    Select -i for includes file
+    Select -h for this help
+
+    DO NOT use -b WITH -i flag. If you want to add another directory or file, then add it to the includes file (-i) as there 
+    should be no need to use both.
+
+  * Example for backup:
+
+      ./backup.sh -d /mnt/NFS/backup/ -f filename -b </span><span class="nv">$HOME</span><span class="sh">/files/
+
+  * Example for restore:
+
+      ./backup.sh -d </span><span class="nv">$HOME</span><span class="sh">/files/ -r /mnt/NFS/backup/
+
+  * Example of backup utilizing the excludes file:
+
+      ./backup.sh -d /mnt/NFS/backup/ -f filename -e excludes.file -b </span><span class="nv">$HOME</span><span class="sh">/files/
+  
+  * Example for no compression. Just add the -n flag, no further args required: 
+
+      ./backup.sh -d /mnt/NFS/backup/ -n -f filename -e excludes.file -b </span><span class="nv">$HOME</span><span class="sh">/files/
+  
+  * Example for includes file
+    (IMPORTANT: the -i flag cannot be used with -b ):
+
+      ./backup.sh -d /mnt/NFS/backup/ -n -f filename -e excludes.file -i includes.file
+</span><span class="no">
+EOF
+</span>    <span class="nb">exit</span> <span class="p">;;</span>
+    <span class="k">*</span><span class="p">)</span>
+      <span class="nb">echo</span> <span class="s1">'Incorrect option selected, run ./backup.sh -h for help'</span> 
+      <span class="nb">exit
+  </span><span class="k">esac
+done</span>
+
+<span class="o">[[</span> <span class="nt">-z</span> <span class="s2">"</span><span class="nv">$dirfrom</span><span class="s2">"</span> <span class="o">&amp;&amp;</span> <span class="nt">-z</span> <span class="s2">"</span><span class="nv">$includes_file</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span>
+  <span class="nb">echo</span> <span class="s2">"Required an option of -b backup directory or -i includes file, exitting..."</span> <span class="o">&amp;&amp;</span> <span class="nb">exit </span>1
+
+<span class="o">[[</span> <span class="nt">-n</span> <span class="s2">"</span><span class="nv">$dirfrom</span><span class="s2">"</span> <span class="o">||</span> <span class="nt">-n</span> <span class="s2">"</span><span class="nv">$includes_file</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> backup
+
+<span class="o">[[</span> <span class="nt">-n</span> <span class="s2">"</span><span class="nv">$dirbk</span><span class="s2">"</span> <span class="o">&amp;&amp;</span> <span class="nt">-n</span> <span class="s2">"</span><span class="nv">$dirto</span><span class="s2">"</span> <span class="o">]]</span> <span class="o">&amp;&amp;</span> recovery
+</pre></table></code></div></div><h2 id="potential-improvements"><span class="mr-2">Potential improvements</span><a href="#potential-improvements" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2><ul><li>Considering the use of –one-file-system as a default or option.<li>Considering making the backup timeline more flexible than 7 increments per folder (2 weeks of daily backups)</ul></div><div class="post-tail-wrapper text-muted"><div class="post-meta mb-3"> <i class="far fa-folder-open fa-fw mr-1"></i> <a href='/categories/homelab/'>homelab</a>, <a href='/categories/project/'>project</a>, <a href='/categories/backup/'>backup</a></div><div class="post-tags"> <i class="fa fa-tags fa-fw mr-1"></i> <a href="/tags/tar/" class="post-tag no-text-decoration" >tar</a> <a href="/tags/compress/" class="post-tag no-text-decoration" >compress</a> <a href="/tags/backup/" class="post-tag no-text-decoration" >backup</a> <a href="/tags/incremental/" class="post-tag no-text-decoration" >incremental</a></div><div class="post-tail-bottom d-flex justify-content-between align-items-center mt-3 pt-5 pb-2"><div class="license-wrapper"> This post is licensed under <a href="https://creativecommons.org/licenses/by/4.0/"> CC BY 4.0 </a> by the author.</div><div class="share-wrapper"> <span class="share-label text-muted mr-1">Share</span> <span class="share-icons"> <a href="https://twitter.com/intent/tweet?text=Simple+Incremental+Backup+Script+-+HomeLab+Hub&url=https%3A%2F%2Fgithub.com%2Fjonnypeace%2Fjonnypeace.github.io.git%2Fposts%2Finc-tar%2F" data-toggle="tooltip" data-placement="top" title="Twitter" target="_blank" rel="noopener" aria-label="Twitter"> <i class="fa-fw fab fa-twitter"></i> </a> <a href="https://www.facebook.com/sharer/sharer.php?title=Simple+Incremental+Backup+Script+-+HomeLab+Hub&u=https%3A%2F%2Fgithub.com%2Fjonnypeace%2Fjonnypeace.github.io.git%2Fposts%2Finc-tar%2F" data-toggle="tooltip" data-placement="top" title="Facebook" target="_blank" rel="noopener" aria-label="Facebook"> <i class="fa-fw fab fa-facebook-square"></i> </a> <a href="https://t.me/share/url?url=https%3A%2F%2Fgithub.com%2Fjonnypeace%2Fjonnypeace.github.io.git%2Fposts%2Finc-tar%2F&text=Simple+Incremental+Backup+Script+-+HomeLab+Hub" data-toggle="tooltip" data-placement="top" title="Telegram" target="_blank" rel="noopener" aria-label="Telegram"> <i class="fa-fw fab fa-telegram"></i> </a> <i id="copy-link" class="fa-fw fas fa-link small" data-toggle="tooltip" data-placement="top" title="Copy link" data-title-succeed="Link copied successfully!"> </i> </span></div></div></div></div></div><div id="panel-wrapper" class="col-xl-3 pl-2 text-muted"><div class="access"><div id="access-lastmod" class="post"><div class="panel-heading">Recently Updated</div><ul class="post-content pl-0 pb-1 ml-1 mt-2"><li><a href="/posts/docker-lxd-keepalive/">High Availability with KeepaliveD-Docker-LXD</a><li><a href="/posts/arch-printer/">Setting up an HP Printer on Arch Linux</a><li><a href="/posts/basic-zfs/">ZFS Mirror, Snapshots, Recovery</a><li><a href="/posts/neovim-customization/">Setting up a Custom Neovim config on Arch Linux</a><li><a href="/posts/inc-tar/">Simple Incremental Backup Script</a></ul></div><div id="access-tags"><div class="panel-heading">Trending Tags</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/homelab/">homelab</a> <a class="post-tag" href="/tags/lxd/">lxd</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/bash/">bash</a> <a class="post-tag" href="/tags/arch-linux/">Arch Linux</a> <a class="post-tag" href="/tags/backup/">backup</a> <a class="post-tag" href="/tags/firewall/">firewall</a> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/servers/">servers</a> <a class="post-tag" href="/tags/zfs/">zfs</a></div></div></div><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script><div id="toc-wrapper" class="pl-0 pr-4 mb-5"><div class="panel-heading pl-3 pt-2 mb-2">Contents</div><nav id="toc" data-toggle="toc"></nav></div></div></div><div class="row"><div id="tail-wrapper" class="col-12 col-lg-11 col-xl-9 pl-3 pr-3 pr-xl-4"><div id="related-posts" class="mt-5 mb-2 mb-sm-4"><h3 class="pt-2 mt-1 mb-4 ml-1" data-toc-skip>Further Reading</h3><div class="card-deck mb-4"><div class="card"> <a href="/posts/backup-lxd/"><div class="card-body"> <em class="small" data-ts="1694966400" data-df="ll" > Sep 17, 2023 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Backup/Copy LXD container to another host</h3><div class="text-muted small"><p> The why? Although I run LXD in clusters, my clusters are generally low powered that don’t need much compute. So i do run some services that require compute, on my laptop or desktop in LXD, and he...</p></div></div></a></div><div class="card"> <a href="/posts/Welcome/"><div class="card-body"> <em class="small" data-ts="1654873200" data-df="ll" > Jun 10, 2022 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Welcome to my Homelab</h3><div class="text-muted small"><p> Welcome Hello and welcome to my homelab project site Website project in progress Here I will be sharing some of my homelab projects and some scripts using mostly…. Ansible Bash Python ...</p></div></div></a></div><div class="card"> <a href="/posts/Ubuntu-Router/"><div class="card-body"> <em class="small" data-ts="1659789000" data-df="ll" > Aug 6, 2022 </em><h3 class="pt-0 mt-1 mb-3" data-toc-skip>Ubuntu Router</h3><div class="text-muted small"><p> Ubuntu Router Update 26-04-2023 Around 3 months ago I upgraded to a N5105 5 port 2.5gb router using the exact same set up, after upgrading my LAN to full 1gbps fibre. I never stumbled across any ...</p></div></div></a></div></div></div><div class="post-navigation d-flex justify-content-between"> <a href="/posts/Welcome/" class="btn btn-outline-primary" prompt="Older"><p>Welcome to my Homelab</p></a> <a href="/posts/Ubuntu-Router/" class="btn btn-outline-primary" prompt="Newer"><p>Ubuntu Router</p></a></div></div></div><footer class="row pl-3 pr-3"><div class="col-12 d-flex justify-content-between align-items-center text-muted pl-0 pr-0"><div class="footer-left"><p class="mb-0"> © 2025 <a href="https://twitter.com/JonnyLinuxPeace">jonny peace</a>. <span data-toggle="tooltip" data-placement="top" title="Except where otherwise noted, the blog posts on this site are licensed under the Creative Commons Attribution 4.0 International (CC BY 4.0) License by the author.">Some rights reserved.</span></p></div><div class="footer-right"><p class="mb-0"> Powered by <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> with <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a> theme.</p></div></div></footer></div><div id="search-result-wrapper" class="d-flex justify-content-center unloaded"><div class="col-12 col-sm-11 post-content"><div id="search-hints"><div id="access-tags"><div class="panel-heading">Trending Tags</div><div class="d-flex flex-wrap mt-3 mb-1 mr-3"> <a class="post-tag" href="/tags/homelab/">homelab</a> <a class="post-tag" href="/tags/lxd/">lxd</a> <a class="post-tag" href="/tags/ubuntu/">ubuntu</a> <a class="post-tag" href="/tags/bash/">bash</a> <a class="post-tag" href="/tags/arch-linux/">Arch Linux</a> <a class="post-tag" href="/tags/backup/">backup</a> <a class="post-tag" href="/tags/firewall/">firewall</a> <a class="post-tag" href="/tags/python/">python</a> <a class="post-tag" href="/tags/servers/">servers</a> <a class="post-tag" href="/tags/zfs/">zfs</a></div></div></div><div id="search-results" class="d-flex flex-wrap justify-content-center text-muted mt-3"></div></div></div></div><div id="mask"></div><a id="back-to-top" href="#" aria-label="back-to-top" class="btn btn-lg btn-box-shadow" role="button"> <i class="fas fa-angle-up"></i> </a><div id="notification" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-animation="true" data-autohide="false"><div class="toast-header"> <button type="button" class="ml-2 ml-auto close" data-dismiss="toast" aria-label="Close"> <span aria-hidden="true">&times;</span> </button></div><div class="toast-body text-center pt-0"><p class="pl-2 pr-2 mb-3"></p><button type="button" class="btn btn-primary" aria-label="Update"> </button></div></div><script src="https://cdn.jsdelivr.net/npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script> <script> SimpleJekyllSearch({ searchInput: document.getElementById('search-input'), resultsContainer: document.getElementById('search-results'), json: '/assets/js/data/search.json', searchResultTemplate: '<div class="pl-1 pr-1 pl-sm-2 pr-sm-2 pl-lg-4 pr-lg-4 pl-xl-0 pr-xl-0"> <a href="{url}">{title}</a><div class="post-meta d-flex flex-column flex-sm-row text-muted mt-1 mb-1"> {categories} {tags}</div><p>{snippet}</p></div>', noResultsText: '<p class="mt-5">Oops! No result founds.</p>', templateMiddleware: function(prop, value, template) { if (prop === 'categories') { if (value === '') { return `${value}`; } else { return `<div class="mr-sm-4"><i class="far fa-folder fa-fw"></i>${value}</div>`; } } if (prop === 'tags') { if (value === '') { return `${value}`; } else { return `<div><i class="fa fa-tag fa-fw"></i>${value}</div>`; } } } }); </script> <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script> <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/en.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script> <script defer src="/assets/js/dist/post.min.js"></script> <script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script> <script defer src="/app.js"></script>
